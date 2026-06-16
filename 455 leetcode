@@ -1,0 +1,44 @@
+import java.util.Arrays;
+
+public class assigncookies {
+    public int findContentChildren(int[] g, int[] s) {
+        int child = 0;
+        int cookies = 0;
+        int n = g.length;
+        int m = s.length;
+        
+        Arrays.sort(g);
+        Arrays.sort(s);
+
+        while (child < n && cookies < m) {
+            //  Match the 'cookies' index with 's' array, and 'child' index with 'g' array
+            if (s[cookies] >= g[child]) {
+                child = child + 1;
+            }
+            cookies = cookies + 1;
+        }
+
+        return child;
+    } 
+    public static void main(String[] args) {
+        assigncookies solution = new assigncookies();
+        
+        // Example test to see it in action
+        int[] g = {1, 2, 3};
+        int[] s = {1, 1};
+        int result = solution.findContentChildren(g, s);
+        
+        System.out.println("Satisfied children: " + result); 
+    } 
+}
+
+// Output will be 1
+
+//Time Complexity: O(NlogN+MlogM) 
+
+// - Kyunki dono arrays ko pehle sort karna padta hai, aur sorting sabse zyada time leti hai.
+
+
+//Space Complexity: O(1) Auxiliary 
+
+// — Kyunki aapne koi naya array nahi banaya, bas kuch variables use kiye hain pointer move karne ke liye.
