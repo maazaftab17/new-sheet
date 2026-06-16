@@ -1,0 +1,82 @@
+import java.util.Arrays;
+
+class Solution {
+    /**
+     * Main Function: Minimum coins nikalne ke liye entry point.
+     * @param coins  - Available coin denominations ka array.
+     * @param amount - Target amount jo hume banana hai.
+     */
+    public int coinChange(int[] coins, int amount) {
+        int n = coins.length;
+        
+        // Step 1: 2D DP State Table [index][amount + 1]
+        // Rows (n) represent available coins up to that index.
+        // Columns (amount + 1) represent target amount from 0 to 'amount'.
+        int[][] dp = new int[n][amount + 1];
+        
+        // Step 2: Initialize DP table with -1 (Unvisited States)
+        for (int[] row : dp) {
+            Arrays.fill(row, -1);
+        }
+
+        // Step 3: Call helper function starting from the last index (n - 1)
+        int result = helper(n - 1, amount, coins, dp);
+        
+        // Step 4: Final Check
+        // Agar result 1e9 ya usse bada hai, matlab amount banana impossible hai.
+        return (result >= (int)1e9) ? -1 : result;
+    }
+
+    /**
+     * Helper Function: Recursion + Memoization logic.
+     */
+    private int helper(int ind, int amount, int[] coins, int[][] dp) {
+        
+        // BASE CASE 1: Agar target amount 0 ho jaye, toh 0 coins chahiye.
+        if (amount == 0) return 0;
+        
+        // BASE CASE 2: Jab hum index 0 (pehla coin) par pahunch jayein.
+        if (ind == 0) {
+            // Agar bacha hua amount pehle coin se complete divide ho jata hai
+            if (amount % coins[0] == 0) {
+                return amount / coins[0]; // Quotient hi required coins ka count hai
+            }
+            // Agar completely divide nahi hota, toh yeh invalid path hai.
+            // Return Infinity (1e9) taaki Math.min isko reject kar de.
+            return (int)1e9;
+        }
+
+        // STEP 5: MEMOIZATION CHECK
+        // Agar is state (ind, amount) ka answer pehle se calculated hai, direct return karo.
+        if (dp[ind][amount] != -1) {
+            return dp[ind][amount];
+        }
+
+        // STEP 6: CHOICE 1 - NOT TAKE (SKIP CURRENT COIN)
+        // Hum current coin ko nahi le rahe, toh bache hue coins (ind - 1) se same amount banayenge.
+        int notTake = helper(ind - 1, amount, coins, dp);
+
+        // STEP 7: CHOICE 2 - TAKE (PICK CURRENT COIN)
+        int take = (int)1e9; // Shuru mein infinity maan lete hain
+        
+        // Hum current coin tabhi le sakte hain jab uski value target amount se choti ya barabar ho.
+        if (coins[ind] <= amount) {
+            // Infinite Supply Rule: Coin lene ke baad bhi hum SAME index 'ind' par hi rahenge,
+            // kyunki hum is coin ko fir se use kar sakte hain. Bas amount kam ho jayega.
+            // '+ 1' isliye kiya kyunki humne ek coin consume kar liya hai.
+            take = 1 + helper(ind, amount - coins[ind], coins, dp);
+        }
+
+        // STEP 8: STORE AND RETURN
+        // Dono choices mein se jo minimum coins de, use DP table mein save karo aur return karo.
+        return dp[ind][amount] = Math.min(take, notTake);
+    }
+
+    // Local Testing ke liye Main Method
+    public static void main(String[] args) {
+        Solution solver = new Solution();
+        int[] coins = {1, 2, 5};
+        int amount = 11;
+        System.out.println("Result: " + solver.coinChange(coins, amount)); // Expected Output: 3
+    }
+}
