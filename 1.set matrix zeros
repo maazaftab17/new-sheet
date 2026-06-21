@@ -54,3 +54,23 @@ class Solution {
         }
     }
 }
+
+
+
+
+Step 1: Rows aur Columns ko Mark Karna
+Sabse pehle hum matrix ke andar traverse karte hain. Agar hume kisi cell matrix[i][j] == 0 milta hai, toh hum samajh jaate hain ki poori i-th row aur poori j-th col ko 0 karna padega.
+Hum iski marking usi matrix ki 1st row aur 1st col mein kar dete hain.
+matrix[i][0] = 0; ka matlab hai: "Yeh poori row 0 hogi."
+matrix[0][j] = 0; ka matlab hai: "Yeh poora column 0 hoga."
+Edge Case (j == 0): Kyunki matrix[0][0] row aur column dono ke liye common hai, isliye pehle column (column 0) ke liye hum ek alag variable col0 ka use karte hain.
+Step 2: Inner Matrix ko 0 Set Karna
+Ab hum row 1 aur column 1 se start karke (yaani pehli row aur pehle col ko chhodkar) baki poori matrix par loop chalate hain.
+Har element matrix[i][j] ke liye hum check karte hain ki kya uski row ka marker (matrix[i][0]) ya uske column ka marker (matrix[0][j]) zero hai?
+Agar dono mein se koi bhi zero hai, toh hum us element ko 0 set kar dete hain.
+Step 3: Pehli Row (1st Row) ko Zero Karna
+Ab baari aati hai un markers ki jinko dekh kar humne baki matrix badli thi.
+Agar matrix[0][0] == 0 hai, iska matlab pehli row mein kahin na kahin zero tha. Isliye hum loop chalakar pehli row ke saare elements ko 0 kar dete hain.
+Step 4: Pehle Column (1st Column) ko Zero Karna
+Aakhiri mein hum col0 variable ko check karte hain. Agar col0 == 0 hai, iska matlab shuruat mein 1st column mein koi zero exist karta tha.
+Isliye hum loop chalakar pehle column ke saare elements ko 0 set kar dete hain.
